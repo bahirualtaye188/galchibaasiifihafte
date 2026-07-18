@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0">
+    <title>Sistamaa To'annoo Galii fi Baasii</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8fafc;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #1e293b;
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+        }
+        .header-bg {
+            background: linear-gradient(135deg, #0f172a, #0d9488, #0369a1);
+            color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px -5px rgba(13, 148, 136, 0.25);
+            padding: 2.5rem 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        @media(min-width: 768px) {
+            .header-bg { padding: 3.5rem 2.5rem; }
+        }
+        .brand-badge {
+            background-color: rgba(255, 255, 255, 0.12);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            font-size: 0.8rem;
+        }
+        .color-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .dot-red { background-color: #ef4444; }
+        .dot-white { background-color: #ffffff; }
+        .dot-black { background-color: #0f172a; }
+        
+        .card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            background-color: #ffffff;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(15, 23, 42, 0.08);
+        }
+        .table-responsive {
+            border-radius: 16px;
+            border: 1px solid #f1f5f9;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .table thead {
+            background-color: #0f172a;
+            color: #ffffff;
+        }
+        .table th {
+            font-weight: 600;
+            padding: 1rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        .table td {
+            padding: 1rem;
+            font-size: 0.9rem;
+            vertical-align: middle;
+            border-bottom: 1px solid #f8fafc;
+            white-space: nowrap;
+        }
+        .form-control, .form-select {
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            border: 1px solid #cbd5e1;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            background-color: #f8fafc;
+        }
+        @media(min-width: 768px) {
+            .form-control, .form-select { font-size: 0.9rem; padding: 0.65rem 1rem; }
+        }
+        .form-control:focus, .form-select:focus {
+            background-color: #ffffff;
+            border-color: #0d9488;
+            box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.12);
+        }
+        .form-label {
+            color: #475569;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        @media(min-width: 768px) {
+            .btn { padding: 0.65rem 1.25rem; }
+        }
+        .btn-success { background-color: #0d9488; border-color: #0d9488; }
+        .btn-success:hover { background-color: #0f766e; border-color: #0f766e; }
+        
+        .status-badge {
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 50rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .badge-paid { background-color: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+        .badge-unpaid { background-color: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+        
+        .stats-card { border-left: 6px solid; }
+        .stats-paid { border-left-color: #10b981; }
+        .stats-unpaid { border-left-color: #ef4444; }
+        .stats-balance { border-left-color: #0284c7; }
+        .text-xs { font-size: 0.75rem; }
+        .empty-state { padding: 3rem 1.5rem; text-align: center; color: #64748b; }
+        
+        /* Navigation tabs */
+        .nav-tabs, .nav-pills {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .nav-tabs .nav-link, .nav-pills .nav-link {
+            white-space: nowrap;
+            border: none;
+            color: #64748b;
+            font-weight: 600;
+            padding: 0.75rem 1.25rem;
+            border-radius: 10px;
+        }
+        .nav-tabs .nav-link.active { background-color: #0d9488; color: white !important; }
+        
+        footer {
+            margin-top: 5rem;
+            border-top: 1px solid #e2e8f0;
+            padding: 2rem 0;
+            background-color: #ffffff;
+        }
+        footer a {
+            color: #0d9488;
+            transition: color 0.2s ease;
+        }
+        footer a:hover {
+            color: #0f766e;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container my-3 my-md-5">
+    <!-- Header -->
+    <div class="header-bg mb-4 text-center">
+        <div class="mb-3">
+            <div class="brand-badge text-white">
+                <span class="color-dot dot-red"></span>
+                <span class="color-dot dot-white"></span>
+                <span class="color-dot dot-black"></span>
+                <span class="ms-1">To'annoo Guutuu</span>
+            </div>
+        </div>
+        <h1 class="fw-extrabold display-5 mb-2"><i class="bi bi-cpu-fill text-success me-2"></i>Sistamaa To'annoo Galii fi Baasii</h1>
+        <p class="mb-0 opacity-90 fs-6 fw-light">Gabaasa galii, baasii, fi haftee madaallii herregaa daqiiqaa muraasa keessatti.</p>
+    </div>
+
+    <!-- Smart Header Action Bar -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+        <div class="text-muted small fw-semibold"><i class="bi bi-clock-history me-1"></i> Guyyaa Har'aa: <span id="currentDate"></span></div>
+        <button class="btn btn-sm btn-dark shadow-sm d-flex align-items-center justify-content-center gap-2" onclick="shareDashboardLink()">
+            <i class="bi bi-share-fill"></i> <span>Qoodi (Share Link)</span>
+        </button>
+    </div>
+
+    <!-- Financial Stats Grid -->
+    <div class="row g-3 g-md-4 mb-4">
+        <div class="col-sm-6 col-md-4">
+            <div class="card stats-card stats-paid p-3 h-100 shadow-sm">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-uppercase text-muted fw-bold text-xs">Galii Guutuu (Total Income)</span>
+                        <h3 class="mb-0 text-success fw-bold mt-1" id="totalIncome">0 ETB</h3>
+                        <small class="text-muted text-xs" id="paidPeopleCount">0 kaffalameera</small>
+                    </div>
+                    <div class="bg-success bg-opacity-10 p-2 p-md-3 rounded-circle text-success">
+                        <i class="bi bi-wallet2 fs-4 fs-md-3"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4">
+            <div class="card stats-card stats-unpaid p-3 h-100 shadow-sm">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-uppercase text-muted fw-bold text-xs">Baasii Guutuu (Total Expenses)</span>
+                        <h3 class="mb-0 text-danger fw-bold mt-1" id="totalExpenses">0 ETB</h3>
+                        <small class="text-muted text-xs" id="expensesCount">0 galmeeffame</small>
+                    </div>
+                    <div class="bg-danger bg-opacity-10 p-2 p-md-3 rounded-circle text-danger">
+                        <i class="bi bi-cart-dash fs-4 fs-md-3"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="card stats-card stats-balance p-3 h-100 shadow-sm">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-uppercase text-muted fw-bold text-xs">Haftee Guutuu (Net Balance)</span>
+                        <h3 class="mb-0 fw-bold mt-1" id="netBalance">0 ETB</h3>
+                        <small class="text-muted text-xs">Garaagarummaa Galii fi Baasii</small>
+                    </div>
+                    <div class="bg-info bg-opacity-10 p-2 p-md-3 rounded-circle text-info">
+                        <i class="bi bi-graph-up fs-4 fs-md-3"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Smart Insights Bar -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-white p-3 shadow-sm border-0">
+                <div class="d-flex flex-wrap justify-content-around gap-3 text-center">
+                    <div>
+                        <div class="text-muted text-xs fw-bold text-uppercase">Giddu-galeessa Kaffaltii</div>
+                        <span class="fw-bold text-dark" id="avgPayment">0 ETB</span>
+                    </div>
+                    <div class="vr d-none d-md-block"></div>
+                    <div>
+                        <div class="text-muted text-xs fw-bold text-uppercase">Baasii Ol-aanaa</div>
+                        <span class="fw-bold text-danger" id="maxExpense">0 ETB</span>
+                    </div>
+                    <div class="vr d-none d-md-block"></div>
+                    <div>
+                        <div class="text-muted text-xs fw-bold text-uppercase">Kaffaltoota Walii-gala</div>
+                        <span class="fw-bold text-primary" id="totalCountOfPeople">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Control Tools -->
+    <div class="card p-3 p-md-4 mb-4 shadow-sm bg-light border-0">
+        <h6 class="fw-bold mb-3 text-secondary d-flex align-items-center">
+            <i class="bi bi-shield-check me-2 text-success"></i> Meeshaalee To'annoo (Data Controls)
+        </h6>
+        <div class="row g-3">
+            <div class="col-12 col-md-6 border-md-end">
+                <p class="mb-2 text-muted small fw-semibold"><i class="bi bi-file-earmark-spreadsheet"></i> 1. CSV Batch Upload</p>
+                <div class="d-flex gap-2 align-items-center">
+                    <input type="file" id="csvFileInput" accept=".csv" class="form-control form-control-sm flex-grow-1">
+                    <button class="btn btn-sm btn-success px-3" onclick="uploadCSV()"><i class="bi bi-upload"></i> Fe'i</button>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 ps-md-4">
+                <p class="mb-2 text-muted small fw-semibold"><i class="bi bi-arrow-repeat"></i> 2. Backup & Sync</p>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-outline-primary flex-grow-1" onclick="downloadBackup()"><i class="bi bi-download"></i> Backup Fudhachuuf</button>
+                    <input type="file" id="backupFileInput" accept=".json" style="display: none;" onchange="retrieveBackup(event)">
+                    <button class="btn btn-sm btn-dark flex-grow-1" onclick="document.getElementById('backupFileInput').click()"><i class="bi bi-cloud-arrow-up"></i> Deebisi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Forms Panel -->
+        <div class="col-lg-4">
+            <ul class="nav nav-tabs mb-3 p-1 bg-white rounded-3 shadow-sm border-0 d-flex text-center" id="formTab" role="tablist">
+                <li class="nav-item flex-fill"><button class="nav-link class active w-100" id="income-tab" data-bs-toggle="tab" data-bs-target="#incomeFormContainer" type="button"><i class="bi bi-plus-circle me-1"></i> Kaffaltii</button></li>
+                <li class="nav-item flex-fill"><button class="nav-link w-100" id="expense-tab" data-bs-toggle="tab" data-bs-target="#expenseFormContainer" type="button"><i class="bi bi-dash-circle me-1"></i> Baasii</button></li>
+            </ul>
+
+            <div class="tab-content">
+                <!-- Income Form -->
+                <div class="tab-pane fade show active" id="incomeFormContainer">
+                    <div class="card p-3 p-md-4 shadow-sm">
+                        <h4 class="mb-3 text-success fw-bold fs-5"><i class="bi bi-person-plus-fill me-2"></i>Galmee Kaffaltii</h4>
+                        <form id="paymentForm">
+                            <div class="mb-3"><label class="form-label">Maqaa Guutuu</label><input type="text" class="form-control" id="fullName" required placeholder="Fakkeenya: Caaltuu Dunfa"></div>
+                            <div class="mb-3"><label class="form-label">Lakk. Bilbilaa</label><input type="tel" class="form-control" id="phoneNumber" required placeholder="09..."></div>
+                            <div class="mb-3"><label class="form-label">Teessoo Guutuu</label><input type="text" class="form-control" id="address" required placeholder="Fakkeenya: Finfinnee"></div>
+                            <div class="mb-3"><label class="form-label">Kaffaltii (ETB)</label><input type="number" class="form-control" id="amount" required placeholder="Maallaqa"></div>
+                            <div class="mb-3"><label class="form-label">Sababa Kaffaltii</label><input type="text" class="form-control" id="reason" required placeholder="Fakkeenya: Ji'a Guraandhala"></div>
+                            <div class="mb-4"><label class="form-label">Haala Kaffaltii</label><select class="form-select" id="status"><option value="Kaffalameera" selected>Kaffalameera</option><option value="Hin Kaffalamne">Hin Kaffalamne</option></select></div>
+                            <button type="submit" class="btn btn-success w-100 py-3 fw-bold shadow-sm">Kaffaltii Galmeessi</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- Expense Form -->
+                <div class="tab-pane fade" id="expenseFormContainer">
+                    <div class="card p-3 p-md-4 shadow-sm border-start border-danger border-4">
+                        <h4 class="mb-3 text-danger fw-bold fs-5"><i class="bi bi-dash-circle-fill me-2"></i>Galmee Baasii</h4>
+                        <form id="expenseForm">
+                            <div class="mb-3"><label class="form-label">Maqaa / Sababa Baasii</label><input type="text" class="form-control" id="expenseTitle" required placeholder="Fakkeenya: Kiraa Waajjiraa"></div>
+                            <div class="mb-3"><label class="form-label">Giddu-gala Baasii (ETB)</label><input type="number" class="form-control" id="expenseAmount" required placeholder="Maallaqa"></div>
+                            <div class="mb-4"><label class="form-label">Guyyaa Baasiin Ta'e</label><input type="date" class="form-control" id="expenseDate" required></div>
+                            <button type="submit" class="btn btn-danger w-100 py-3 fw-bold shadow-sm">Baasii Galmeessi</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tables View Panel -->
+        <div class="col-lg-8">
+            <ul class="nav nav-pills mb-3 bg-white p-2 rounded-3 shadow-sm d-flex gap-2" id="tableTab">
+                <li class="nav-item flex-fill"><button class="nav-link active w-100 text-center" id="income-table-tab" data-bs-toggle="pill" data-bs-target="#incomeTablePane" type="button"><i class="bi bi-person-check"></i> Galmee Kaffaltootaa</button></li>
+                <li class="nav-item flex-fill"><button class="nav-link w-100 text-center" id="expense-table-tab" data-bs-toggle="pill" data-bs-target="#expenseTablePane" type="button"><i class="bi bi-journal-text"></i> Galmee Baasiiwwanii</button></li>
+            </ul>
+
+            <div class="tab-content">
+                <!-- Income Table -->
+                <div class="tab-pane fade show active" id="incomeTablePane">
+                    <div class="card p-3 p-md-4 shadow-sm">
+                        <div class="row g-2 mb-3">
+                            <div class="col-12 col-sm-6"><input type="text" id="searchInput" class="form-control" placeholder="Maqaa ykn Bilbilaan barbaadi..." onkeyup="filterAndRender()"></div>
+                            <div class="col-6 col-sm-3"><select id="filterStatus" class="form-select" onchange="filterAndRender()"><option value="All">Hunda</option><option value="Kaffalameera">Kaffalameera</option><option value="Hin Kaffalamne">Hin Kaffalamne</option></select></div>
+                            <div class="col-6 col-sm-3"><button class="btn btn-outline-success w-100" onclick="exportToCSV()"><i class="bi bi-file-earmark-excel"></i> Excel</button></div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead><tr><th>#</th><th>Maqaa Guutuu</th><th>Bilbila</th><th>Kaffaltii</th><th>Sababa</th><th>Haala</th><th class="text-center">Hojii</th></tr></thead>
+                                <tbody id="dataTable"></tbody>
+                            </table>
+                        </div>
+                        <div id="noDataState" class="empty-state d-none"><i class="bi bi-folder2-open"></i><h5>Galmeen hin argamne</h5></div>
+                    </div>
+                </div>
+                <!-- Expense Table -->
+                <div class="tab-pane fade" id="expenseTablePane">
+                    <div class="card p-3 p-md-4 shadow-sm border-top border-danger border-3">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead><tr class="table-dark"><th>#</th><th>Maqaa Baasii</th><th>Giddu-gala</th><th>Guyyaa</th><th class="text-center">Hojii</th></tr></thead>
+                                <tbody id="expenseDataTable"></tbody>
+                            </table>
+                        </div>
+                        <div id="noExpenseState" class="empty-state d-none"><i class="bi bi-receipt"></i><h5>Baasiin hin jiru</h5></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Smart Footer Area with Link and Copyright Statement -->
+    <footer class="text-center">
+        <div class="container">
+            <p class="mb-2 fw-semibold">
+                <i class="bi bi-person-badge-fill me-1"></i> Prepared by: 
+                <a href="https://github.com/BahiruAltaye" target="_blank" class="text-decoration-none fw-bold">Bahiru Altaye</a>
+            </p>
+            <p class="mb-0 text-muted small" style="letter-spacing: 0.3px;">
+                © 2026 Bahiru Altaye. Mirgi Hunduu Eegamaadha. (All Rights Reserved).
+            </p>
+        </div>
+    </footer>
+</div>
+
+<!-- ================= EDIT MODALS ================= -->
+<div class="modal fade" id="editPaymentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg" style="border-radius: 20px;">
+            <div class="modal-header bg-success text-white" style="border-top-left-radius: 19px; border-top-right-radius: 19px;">
+                <h5 class="modal-title fw-bold"><i class="bi bi-pencil-square me-2"></i>Kaffaltii Sirreessi</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-3 p-md-4">
+                <form id="editPaymentForm">
+                    <input type="hidden" id="editPaymentIndex">
+                    <div class="mb-3"><label class="form-label">Maqaa Guutuu</label><input type="text" class="form-control" id="editFullName" required></div>
+                    <div class="mb-3"><label class="form-label">Lakk. Bilbilaa</label><input type="tel" class="form-control" id="editPhoneNumber" required></div>
+                    <div class="mb-3"><label class="form-label">Teessoo Guutuu</label><input type="text" class="form-control" id="editAddress" required></div>
+                    <div class="mb-3"><label class="form-label">Kaffaltii (ETB)</label><input type="number" class="form-control" id="editAmount" required></div>
+                    <div class="mb-3"><label class="form-label">Sababa Kaffaltii</label><input type="text" class="form-control" id="editReason" required></div>
+                    <div class="mb-4"><label class="form-label">Haala Kaffaltii</label><select class="form-select" id="editStatus"><option value="Kaffalameera">Kaffalameera</option><option value="Hin Kaffalamne">Hin Kaffalamne</option></select></div>
+                    <button type="submit" class="btn btn-success w-100 py-3 fw-bold shadow-sm">Gabaasa Jijjiiri</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editExpenseModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg" style="border-radius: 20px;">
+            <div class="modal-header bg-danger text-white" style="border-top-left-radius: 19px; border-top-right-radius: 19px;">
+                <h5 class="modal-title fw-bold"><i class="bi bi-pencil-square me-2"></i>Baasii Sirreessi</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-3 p-md-4">
+                <form id="editExpenseForm">
+                    <input type="hidden" id="editExpenseIndex">
+                    <div class="mb-3"><label class="form-label">Maqaa / Sababa Baasii</label><input type="text" class="form-control" id="editExpenseTitle" required></div>
+                    <div class="mb-3"><label class="form-label">Giddu-gala Baasii (ETB)</label><input type="number" class="form-control" id="editExpenseAmount" required></div>
+                    <div class="mb-4"><label class="form-label">Guyyaa Baasiin Ta'e</label><input type="date" class="form-control" id="editExpenseDate" required></div>
+                    <button type="submit" class="btn btn-danger w-100 py-3 fw-bold shadow-sm">Baasii Jijjiiri</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Live Calendar Indicator
+    document.getElementById('currentDate').innerText = new Date().toLocaleDateString('om-ET', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+    let payments = JSON.parse(localStorage.getItem('payments')) || [
+        { fullName: "Obbo Insaanii Tsaggaayee", phoneNumber: "0911001122", address: "Finfinnee", amount: "1500", reason: "Ji'a Guraandhala", status: "Kaffalameera" },
+        { fullName: "Caaltuu Dunfa", phoneNumber: "0922334455", address: "Adama", amount: "1200", reason: "Ji'a Guraandhala", status: "Hin Kaffalamne" }
+    ];
+    let expenses = JSON.parse(localStorage.getItem('expenses')) || [
+        { title: "Kiraa Waajjiraa", amount: "1200", date: "2026-07-01" }
+    ];
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const sharedData = urlParams.get('sharedSnapshot');
+        if (sharedData) {
+            try {
+                const decoded = JSON.parse(decodeURIComponent(escape(atob(sharedData))));
+                if (decoded.payments && decoded.expenses && confirm("Ragaa liinkii kanaan isiniif qoodame argitaniittu. Sistama keessan irratti fe'uu ni barbaadduu?")) {
+                    payments = decoded.payments;
+                    expenses = decoded.expenses;
+                    localStorage.setItem('payments', JSON.stringify(payments));
+                    localStorage.setItem('expenses', JSON.stringify(expenses));
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
+            } catch (err) { console.error(err); }
+        }
+        filterAndRender();
+    });
+
+    function shareDashboardLink() {
+        try {
+            const dataToShare = { payments, expenses };
+            const jsonStr = JSON.stringify(dataToShare);
+            const encodedData = btoa(unescape(encodeURIComponent(jsonStr)));
+            const shareUrl = `${window.location.origin}${window.location.pathname}?sharedSnapshot=${encodedData}`;
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                alert("Liinkii daashboordii keessanii milkiin gara 'clipboard' keessanitti koppii ta'eera!");
+            }).catch(() => { alert("Liinkii gubbaa jiru cuqaasaa copy godhaa."); });
+        } catch(e) { alert("Ragaan kuufame baay'ee guddaa dha."); }
+    }
+
+    function filterAndRender() {
+        const searchVal = document.getElementById('searchInput').value.toLowerCase().trim();
+        const filterVal = document.getElementById('filterStatus').value;
+        const tableBody = document.getElementById('dataTable');
+        tableBody.innerHTML = '';
+        
+        let sumIncome = 0, paidPeopleCount = 0, renderedRowsCount = 0;
+        let incomeRecordsForAvg = [];
+
+        payments.forEach((p, index) => {
+            if (p.status === 'Kaffalameera') { 
+                sumIncome += Number(p.amount); 
+                paidPeopleCount++; 
+            }
+            incomeRecordsForAvg.push(Number(p.amount));
+            
+            if ((p.fullName.toLowerCase().includes(searchVal) || p.phoneNumber.includes(searchVal)) && (filterVal === 'All' || p.status === filterVal)) {
+                renderedRowsCount++;
+                tableBody.innerHTML += `
+                    <tr>
+                        <td>${renderedRowsCount}</td>
+                        <td><strong>${p.fullName}</strong></td>
+                        <td>${p.phoneNumber}</td>
+                        <td>${Number(p.amount).toLocaleString()} ETB</td>
+                        <td>${p.reason}</td>
+                        <td><span class="status-badge ${p.status === 'Kaffalameera' ? 'badge-paid' : 'badge-unpaid'}" onclick="toggleStatus(${index})">${p.status}</span></td>
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center gap-2">
+                                <button class="btn btn-sm btn-outline-primary border-0 p-1 rounded-circle" onclick="openEditPaymentModal(${index})"><i class="bi bi-pencil-square"></i></button>
+                                <button class="btn btn-sm btn-outline-danger border-0 p-1 rounded-circle" onclick="deleteRecord(${index})"><i class="bi bi-trash3"></i></button>
+                            </div>
+                        </td>
+                    </tr>`;
+            }
+        });
+        document.getElementById('noDataState').className = renderedRowsCount === 0 ? 'empty-state' : 'empty-state d-none';
+
+        const expenseTableBody = document.getElementById('expenseDataTable');
+        expenseTableBody.innerHTML = '';
+        let sumExpenses = 0;
+        let maxExpVal = 0;
+
+        expenses.forEach((e, idx) => {
+            const currentAmt = Number(e.amount);
+            sumExpenses += currentAmt;
+            if (currentAmt > maxExpVal) maxExpVal = currentAmt;
+
+            expenseTableBody.innerHTML += `
+                <tr>
+                    <td>${idx + 1}</td>
+                    <td><strong>${e.title}</strong></td>
+                    <td class="fw-bold text-danger">${currentAmt.toLocaleString()} ETB</td>
+                    <td>${e.date}</td>
+                    <td class="text-center">
+                        <div class="d-flex justify-content-center gap-2">
+                            <button class="btn btn-sm btn-outline-primary border-0 p-1 rounded-circle" onclick="openEditExpenseModal(${idx})"><i class="bi bi-pencil-square"></i></button>
+                            <button class="btn btn-sm btn-outline-danger border-0 p-1 rounded-circle" onclick="deleteExpense(${idx})"><i class="bi bi-trash3"></i></button>
+                        </div>
+                    </td>
+                </tr>`;
+        });
+        document.getElementById('noExpenseState').className = expenses.length === 0 ? 'empty-state' : 'empty-state d-none';
+
+        // Calculate Intelligent Insights
+        const avgPay = incomeRecordsForAvg.length > 0 ? (incomeRecordsForAvg.reduce((a, b) => a + b, 0) / incomeRecordsForAvg.length) : 0;
+        document.getElementById('avgPayment').innerText = Math.round(avgPay).toLocaleString() + " ETB";
+        document.getElementById('maxExpense').innerText = maxExpVal.toLocaleString() + " ETB";
+        document.getElementById('totalCountOfPeople').innerText = payments.length;
+
+        // Render Balance Info
+        const netBalanceVal = sumIncome - sumExpenses;
+        document.getElementById('totalIncome').innerText = sumIncome.toLocaleString() + " ETB";
+        document.getElementById('paidPeopleCount').innerText = `${paidPeopleCount} kaffalameera`;
+        document.getElementById('totalExpenses').innerText = sumExpenses.toLocaleString() + " ETB";
+        document.getElementById('expensesCount').innerText = `${expenses.length} galmeeffame`;
+
+        const netBalanceEl = document.getElementById('netBalance');
+        netBalanceEl.innerText = (netBalanceVal >= 0 ? "+" : "") + netBalanceVal.toLocaleString() + " ETB";
+        netBalanceEl.className = netBalanceVal >= 0 ? "mb-0 text-success fw-bold mt-1" : "mb-0 text-danger fw-bold mt-1";
+    }
+
+    document.getElementById('paymentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        payments.push({
+            fullName: document.getElementById('fullName').value.trim(),
+            phoneNumber: document.getElementById('phoneNumber').value.trim(),
+            address: document.getElementById('address').value.trim(),
+            amount: document.getElementById('amount').value,
+            reason: document.getElementById('reason').value.trim(),
+            status: document.getElementById('status').value
+        });
+        localStorage.setItem('payments', JSON.stringify(payments));
+        filterAndRender(); this.reset();
+    });
+
+    document.getElementById('expenseForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        expenses.push({
+            title: document.getElementById('expenseTitle').value.trim(),
+            amount: document.getElementById('expenseAmount').value,
+            date: document.getElementById('expenseDate').value
+        });
+        localStorage.setItem('expenses', JSON.stringify(expenses));
+        filterAndRender(); this.reset();
+    });
+
+    function openEditPaymentModal(index) {
+        const p = payments[index];
+        document.getElementById('editPaymentIndex').value = index;
+        document.getElementById('editFullName').value = p.fullName;
+        document.getElementById('editPhoneNumber').value = p.phoneNumber;
+        document.getElementById('editAddress').value = p.address || "";
+        document.getElementById('editAmount').value = p.amount;
+        document.getElementById('editReason').value = p.reason || "";
+        document.getElementById('editStatus').value = p.status;
+        new bootstrap.Modal(document.getElementById('editPaymentModal')).show();
+    }
+
+    document.getElementById('editPaymentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const index = document.getElementById('editPaymentIndex').value;
+        payments[index] = {
+            fullName: document.getElementById('editFullName').value.trim(),
+            phoneNumber: document.getElementById('editPhoneNumber').value.trim(),
+            address: document.getElementById('editAddress').value.trim(),
+            amount: document.getElementById('editAmount').value,
+            reason: document.getElementById('editReason').value.trim(),
+            status: document.getElementById('editStatus').value
+        };
+        localStorage.setItem('payments', JSON.stringify(payments));
+        filterAndRender();
+        bootstrap.Modal.getInstance(document.getElementById('editPaymentModal')).hide();
+    });
+
+    function openEditExpenseModal(index) {
+        const exp = expenses[index];
+        document.getElementById('editExpenseIndex').value = index;
+        document.getElementById('editExpenseTitle').value = exp.title;
+        document.getElementById('editExpenseAmount').value = exp.amount;
+        document.getElementById('editExpenseDate').value = exp.date;
+        new bootstrap.Modal(document.getElementById('editExpenseModal')).show();
+    }
+
+    document.getElementById('editExpenseForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const index = document.getElementById('editExpenseIndex').value;
+        expenses[index] = {
+            title: document.getElementById('editExpenseTitle').value.trim(),
+            amount: document.getElementById('editExpenseAmount').value,
+            date: document.getElementById('editExpenseDate').value
+        };
+        localStorage.setItem('expenses', JSON.stringify(expenses));
+        filterAndRender();
+        bootstrap.Modal.getInstance(document.getElementById('editExpenseModal')).hide();
+    });
+
+    function toggleStatus(index) { payments[index].status = payments[index].status === 'Kaffalameera' ? 'Hin Kaffalamne' : 'Kaffalameera'; localStorage.setItem('payments', JSON.stringify(payments)); filterAndRender(); }
+    function deleteRecord(index) { if(confirm('Haqamuu qabaa?')) { payments.splice(index, 1); localStorage.setItem('payments', JSON.stringify(payments)); filterAndRender(); } }
+    function deleteExpense(index) { if(confirm('Baasiin kun haqamuu qabaa?')) { expenses.splice(index, 1); localStorage.setItem('expenses', JSON.stringify(expenses)); filterAndRender(); } }
+    function downloadBackup() { const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ payments, expenses })); const dl = document.createElement('a'); dl.setAttribute("href", dataStr); dl.setAttribute("download", "Backup_Toannoo_Galii_Baasii.json"); dl.click(); }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
